@@ -1,0 +1,18 @@
+WSTAW PONIŻSZY TEMPLATE DO FOLDERU INPUT BEZ KOMENTARZY (//) DO PLIKU nazwa.json
+
+{
+    //Kto ile pkt:
+    "points": {
+        "000001": "1",
+        "000002": "2"
+    },
+    //Kto jakie zadania:
+    "declarations": {
+        "000001": ["1", "2", "3"],
+        "000002": ["1", "2", "4"]
+    },
+    //Zewnetrzny priorytet:
+    "priority": {
+        "000001": "1"
+    }
+}
