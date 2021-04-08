@@ -1,6 +1,7 @@
 import json
 import sys
 import os
+import random
 
 #cmd template:
 #python3 main.py -input="name" -expect_out=true
@@ -56,10 +57,12 @@ def makeQueue(points, tasks, priorities, declarations):
     # How many tasks has given student done so far
     done = {}
     for task in tasks:
+        # print("Current task: ", task)
         min_points = 999
         min_declared = 999
         min_done = 999
         min_index = ""
+        same_indexes = [] # Pick random index from this list in case of same priority over current task
         prio_index = ""
 
         for index in tasks[task]:
@@ -68,15 +71,21 @@ def makeQueue(points, tasks, priorities, declarations):
                 done[index] = 0
             # If given student has less points than others, less declared tasks than others and done less tasks today, he has priority in the queue
             # Also if one or more students have declared priority, we also check below conditions
-            if (points[index] <= min_points and len(declarations[index]) <= min_declared and done[index] <= min_done):
+            # print(declarations[index])
+            if (len(declarations[index]) == min_declared and done[index] == min_done and points[index] == min_points): same_indexes.append(index)
+            if (len(declarations[index]) < min_declared or done[index] < min_done or points[index] < min_points):
                 # If someone has already been assigned this task with priority, skip if current student isn't prioritized
                 if prio_index and task in priorities and index not in priorities[task]: continue
                 if task in priorities and index in priorities[task]: prio_index = index
+                same_indexes = []
+                # print(points[index], len(declarations[index]), done[index])
                 min_index = index
                 min_points = points[index]
                 min_declared = len(declarations[index])
                 min_done = done[index]
-
+                same_indexes.append(index)
+        
+        if len(same_indexes) > 1: min_index = same_indexes[random.randrange(len(same_indexes))]
         if prio_index: min_index = prio_index
         queue[task] = min_index
         points[min_index] += 1
